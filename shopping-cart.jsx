@@ -1,13 +1,38 @@
-// Ex 2 - remove any item from navbar with less than minStock in stock
-// write out both the name and the number in stock in format apple:2
-function NavBar({ menuitems, minstock }) {
-  const updatedList = menuitems.map((item, index) => {
-    if (item.instock >= minstock) {
-      return <li key={index}>{item.name}</li>;
-    }
+// Ex 3 - write out all items with their stock number
+// provide a button and use onClick={moveToCart} to move 1 item into the Shopping Cart
+// use React.useState to keep track of items in the Cart.
+// use React.useState to keep track of Stock items
+// list out the Cart items in another column
+function NavBar({ stockitems }) {
+  const [cart, setCart] = React.useState([]);
+  const [stock, setStock] = React.useState(stockitems);
+  const { Button } = ReactBootstrap;
+  // event apple:2
+  const moveToCart = (id, e) => {
+    console.log(id);
+    let [name, num] = e.target.innerHTML.split(":"); // innerHTML should be format name:3
+    // use newStock = stock.map to find "name" and decrease number in stock by 1
+    // only if instock is >=  do we move item to Cart and update stock
+    let newStock = stock.map((item, index) => {
+      if (item.name == name) item.instock--;
+      return item;
+    });
+    setStock(newStock);
+  };
+  const updatedList = stock.map((item, index) => {
+    return (
+      <Button onClick={e => moveToCart({index}, e)} key={index}>
+        {item.name}:{item.instock}
+      </Button>
+    );
   });
   // note that React needs to have a single Parent
-  return <ul style={{ listStyleType: "none" }}>{updatedList}</ul>;
+  return (
+    <>
+      <ul style={{ listStyleType: "none" }}>{updatedList}</ul>
+      <h1>Shopping Cart</h1>
+    </>
+  );
 }
 const menuItems = [
   { name: "apple", instock: 2 },
@@ -17,6 +42,6 @@ const menuItems = [
   { name: "orange", instock: 1 }
 ];
 ReactDOM.render(
-  <NavBar menuitems={menuItems} minstock={2} />,
+  <NavBar stockitems={menuItems} />,
   document.getElementById("root")
 );
