@@ -13,15 +13,14 @@ function MyStore({ stockitems }) {
     let [name, num] = e.target.innerHTML.split(":"); // innerHTML should be format name:3
     // use newStock = stock.map to find "name" and decrease number in stock by 1
     // only if instock is > 0 do we move item to Cart and update stock
-    if (num > 0) {
-      let newStock = stock.map((item, index) => {
-        if (item.name == name) item.instock--;
-        return item;
-      });
-      let newCart = [...cart, name];
-      setStock(newStock);
-      setCart(newCart);
-    }
+    if (num <= 0) return;
+    let newStock = stock.map((item, index) => {
+      if (item.name == name) item.instock--;
+      return item;
+    });
+    let newCart = [...cart, name];
+    setStock(newStock);
+    setCart(newCart);
   };
   const updatedList = stock.map((item, index) => {
     return (
